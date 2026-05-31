@@ -4,7 +4,7 @@
 This project implements a complete intelligent agent system where a Large Language Model (LLM) controls a robot inside a virtual Webots world.  
 The agent perceives its environment, reasons about goals, plans paths, and executes actions to achieve tasks such as:
 
-**“Go to the red goal, then the green goal.”**
+**“Go to the yellow goal, then the red goal, then the green goal.”**
 
 The system integrates:
 - Webots (3D simulation)
