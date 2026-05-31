@@ -6,6 +6,23 @@ import os
 import heapq
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
+import csv
+from datetime import datetime
+
+# CSV LOGGING (saved in project root)
+LOG_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "log.csv")
+
+# Initialize CSV file with headers
+with open(LOG_PATH, "w", newline="") as f:
+    writer = csv.writer(f)
+    writer.writerow([
+        "x", "y", "yaw",
+        "waypoint_index",
+        "action",
+        "distance_to_waypoint",
+        "heading_error"
+    ])
+
 
 TIME_STEP = 32
 
@@ -382,9 +399,18 @@ def visualize_world_and_paths(start_x, start_y, objects, obstacles, candidates_p
 
     # Goals
     for obj in objects:
-        ax.plot(obj["x"], obj["y"], 'o', markersize=10)
-        ax.text(obj["x"] + 0.05, obj["y"] + 0.05, obj["name"])
-
+        if obj["name"] == "yellow goal":
+            color = "yellow"
+        elif obj["name"] == "green goal":
+            color = "green"
+        elif obj["name"] == "red goal":
+            color = "red"
+        else:
+            color = "black"
+    
+        ax.plot(obj["x"], obj["y"], 'o', markersize=10, color=color)
+        ax.text(obj["x"] + 0.05, obj["y"] + 0.05, obj["name"], color=color)
+    
     # Start
     ax.plot(start_x, start_y, 'bo', markersize=12, label="Start")
 
@@ -409,6 +435,20 @@ def visualize_world_and_paths(start_x, start_y, objects, obstacles, candidates_p
     save_path = os.path.join(controller_dir, "map.png")
     plt.savefig(save_path, dpi=300)
     print("Saved visualization to:", save_path)
+
+def log_step(gps, imu, wp_index, action, dist, heading_err):
+    pos = gps.getValues()
+    roll, pitch, yaw = imu.getRollPitchYaw()
+
+    with open(LOG_PATH, "a", newline="") as f:
+        writer = csv.writer(f)
+        writer.writerow([
+            pos[0], pos[1], yaw,
+            wp_index,
+            action,
+            dist,
+            heading_err
+        ])
 
 
 # ----------------- MAIN -----------------
@@ -450,14 +490,16 @@ def main():
 
     # -------- PLAN FULL PATH (WITH GOAL STOP RADIUS) --------
     all_waypoints = []
+    goal_end_indices = []   # NEW: track where each goal ends
+    
     for g in GOALS:
         goal_x = g["x"]
         goal_y = g["y"]
-
+    
         dx = goal_x - cur_x
         dy = goal_y - cur_y
         dist = math.hypot(dx, dy)
-
+    
         if dist > GOAL_STOP_RADIUS:
             scale = (dist - GOAL_STOP_RADIUS) / dist
             safe_goal_x = cur_x + dx * scale
@@ -465,11 +507,15 @@ def main():
         else:
             safe_goal_x = goal_x
             safe_goal_y = goal_y
-
+    
         wps = plan_path_xy(cur_x, cur_y, safe_goal_x, safe_goal_y, occupied)
+    
         if len(wps) > 1:
             all_waypoints.extend(wps[1:])
+            goal_end_indices.append(len(all_waypoints) - 1)   # NEW
+    
         cur_x, cur_y = goal_x, goal_y
+
 
     # -------- FOLLOW WAYPOINTS --------
     wp_index = 0
@@ -495,11 +541,34 @@ def main():
 
         if dist < WAYPOINT_REACHED_DIST:
             print(f"[SYSTEM] Waypoint {wp_index} reached.")
+        
+            # NEW: Check if this waypoint is the final waypoint for a goal
+            if wp_index in goal_end_indices:
+                goal_number = goal_end_indices.index(wp_index)
+                gx = GOALS[goal_number]["x"]
+                gy = GOALS[goal_number]["y"]
+        
+                # Find matching object name
+                goal_name = None
+                for obj in OBJECTS:
+                    if abs(obj["x"] - gx) < 0.01 and abs(obj["y"] - gy) < 0.01:
+                        goal_name = obj["name"]
+                        break
+        
+                if goal_name is None:
+                    goal_name = f"Goal {goal_number}"
+        
+                print(f"[GOAL] {goal_name} reached successfully.")
+        
             wp_index += 1
             continue
+        
 
         action = decide_action(dist, heading_err)
         vl, vr = action_to_wheels(action, dist)
+        
+        log_step(gps, imu, wp_index, action, dist, heading_err)
+
         left_motor.setVelocity(vl)
         right_motor.setVelocity(vr)
 
