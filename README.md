@@ -57,6 +57,7 @@ Humanoid Software/
 │   └── plane_env.wbt                    # Webots world file
 │
 ├── Full_Documentation.pdf               # Complete technical documentation
+├── Simulation_video                     # Webot simulation video along with console output
 ├── README.md                            # Short overview + run instructions
 ├── LICENSE
 └── .gitignore
