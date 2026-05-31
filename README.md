@@ -127,6 +127,17 @@ Generates a real-time `matplotlib` plot tracking the system's internal state:
 * Candidate paths evaluated vs. the final selected path.
 
 ---
+## 📊 Visualization Example
+
+Below is the automatically generated map showing:
+- Obstacles  
+- Start position  
+- Goals  
+- Selected path  
+
+<p align="center">
+  <img src="Humanoid%20Software/controllers/controller_plane_env/map.png" alt="World Map and Candidate Paths" width="600"/>
+</p>
 
 ## ▶️ How to Run
 
@@ -175,26 +186,6 @@ Open the automatically generated layout image to review the planned path:`contro
 [SYSTEM] All waypoints completed.
 Saved visualization to: map.png
 ```
-
-## 📊 Visualization Example
-
-Below is the automatically generated map showing:
-- Obstacles  
-- Start position  
-- Goals  
-- Selected path  
-
-![World Map Visualization](controllers/controller_plane_env/map.png)
-
----
-
-## 📊 Map Visualization
-
-Below is an example of the generated `map.png` showing the environment layout, detected obstacles (grey blocks), goals, and the optimal path planned by the system:
-
-<p align="center">
-  <img src="./controllers/controller_plane_env/map.png" alt="World Map and Candidate Paths" width="600"/>
-</p>
 
 
 ## 🧩 Design Choices
