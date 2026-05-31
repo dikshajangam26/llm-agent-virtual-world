@@ -44,8 +44,23 @@ Generates a world map with obstacles, goals, and the selected path:
 ---
 
 ## 📂 Project Structure
-
-
+```text
+Humanoid Software/
+│
+├── controllers/
+│   ├── controller_plane_env/
+│   │   ├── controller_plane_env.py      # Main controller (LLM reasoning + planning + control)
+│   │   └── map.png                      # Auto‑generated visualization of world + path
+│   └── log.csv                          # Auto‑generated behaviour log
+│
+├── worlds/
+│   └── plane_env.wbt                    # Webots world file
+│
+├── Full_Documentation.pdf               # Complete technical documentation
+├── README.md                            # Short overview + run instructions
+├── LICENSE
+└── .gitignore
+```
 
 ---
 
