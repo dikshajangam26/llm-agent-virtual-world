@@ -136,7 +136,7 @@ At the end of the run, the system generates `map.png` showing:
 
 ## Project Structure
 ```text
-Humanoid Software/
+LLM_Agent_virtual_world/
 │
 ├── controllers/
 │   ├── controller_plane_env/
