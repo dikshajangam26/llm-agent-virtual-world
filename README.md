@@ -15,6 +15,10 @@ The system integrates:
 - Low‑level waypoint following
 - Full visualization of world + obstacles + path
 
+**Route instruction:**  
+
+If you want to change the route, simply modify the user instruction on line 430 of `controller_plane_env.py`.
+
 ---
 
 # 🚀 Features
