@@ -9,7 +9,7 @@ This project implements an intelligent agent that navigates a Webots environment
 - CSV behaviour logging  
 
 The robot follows natural‑language instructions such as:  
-**“Go to the yellow goal, then the red goal, then the green goal.”**
+**“Choose the most efficient route to visit all goals.”**
 
 ## **Full Documentation:**  
 For a complete explanation of the system, including architecture, design choices, planning logic, and implementation details, please refer to the attached **Full Documentation PDF**.
@@ -66,7 +66,7 @@ Humanoid Software/
 
 ## 🛠️ Changing the Route
 
-Modify the natural‑language instruction on **line 430** of:
+Modify the natural‑language instruction on **line 470** of:
 `controllers/controller_plane_env/controller_plane_env.py`
 
 
