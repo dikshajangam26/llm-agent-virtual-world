@@ -183,9 +183,15 @@ Below is the automatically generated map showing:
 - Goals  
 - Selected path  
 
-## 📊 Visualization Example
+---
 
-![World Map Visualization](controllers/controller_plane_env/map.png)
+## 📊 Map Visualization
+
+Below is an example of the generated `map.png` showing the environment layout, detected obstacles (grey blocks), goals, and the optimal path planned by the system:
+
+<p align="center">
+  <img src="controllers/controller_plane_env/map.png" alt="World Map and Candidate Paths" width="600"/>
+</p>
 
 
 ## 🧩 Design Choices
