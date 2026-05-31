@@ -134,3 +134,29 @@ Ensure you have Python installed, then install the required libraries:
 ```bash
 pip install matplotlib requests
 ```
+
+### 2. Open Webots
+1. Launch **Webots**.
+2. Open the world file: `worlds/plane_env.wbt`.
+3. Verify that the robot's controller is assigned to `controller_plane_env`.
+
+### 3. Run the Simulation
+Click the **Play** button in Webots. The console will output live telemetry logs:
+```
+[LLM] Generating multi-path goal candidates...
+[PLANNER] Occupied cells: 60
+[SYSTEM] Waypoint 0 reached.
+...
+[SYSTEM] All waypoints completed.
+Saved visualization to: .../controllers/controller_plane_env/map.png
+```
+
+### 4. View Results
+Open the automatically generated layout image to review the planned path:
+
+---
+
+## 📝 Example Input / Output
+
+* **User Input:** *"Go to the red goal, then the green goal."*
+* **LLM JSON Response:**
