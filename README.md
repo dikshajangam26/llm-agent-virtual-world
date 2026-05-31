@@ -183,7 +183,7 @@ Below is the automatically generated map showing:
 - Goals  
 - Selected path  
 
-(C:\Projects\Humanoid Software\controllers\controller_plane_env\map.png)
+![World Map Visualization](C:\Projects\Humanoid Software\controllers\controller_plane_env\map.png)
 
 
 ## 🧩 Design Choices
