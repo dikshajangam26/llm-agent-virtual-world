@@ -82,7 +82,7 @@ Saved as `map.png` inside the controller folder.
 ├── worlds/
 │   └── plane_env.wbt               # Webots 3D world environment
 └── README.md                       # Project documentation
-
+```
 
 ---
 
@@ -101,6 +101,7 @@ It returns:
     {"x": ..., "y": ...}
   ]
 }
+```
 ### 2. Occupancy Grid
 Translates physical world barriers into a discrete map for the pathfinder.
 * Converts static 3D obstacles into axis-aligned 2D rectangles.
@@ -152,7 +153,7 @@ Saved visualization to: .../controllers/controller_plane_env/map.png
 ```
 
 ### 4. View Results
-Open the automatically generated layout image to review the planned path:
+Open the automatically generated layout image to review the planned path:`controllers/controller_plane_env/map.png`
 
 ---
 
@@ -160,3 +161,47 @@ Open the automatically generated layout image to review the planned path:
 
 * **User Input:** *"Go to the red goal, then the green goal."*
 * **LLM JSON Response:**
+```json
+{
+  "goals": [
+    {"x": 0.19, "y": 1.24},
+    {"x": 1.15, "y": -1.26}
+  ]
+}
+```
+* **Controller Console Output:**
+```
+[SYSTEM] Waypoint 19 reached.
+[SYSTEM] All waypoints completed.
+Saved visualization to: map.png
+```
+
+## 🧩 Design Choices
+
+### 1. Why Webots?
+Provides a realistic 3D environment with physics, sensors, and easy Python integration.
+
+### 2. Why A* Lattice Planning?
+Simple, deterministic, and works perfectly for grid‑based navigation tasks.
+
+### 3. Why an Occupancy Grid?
+Allows clean obstacle modeling and safe path planning. **Inflation** ensures the robot maintains a safety buffer and never clips obstacles.
+
+### 4. Why a Discrete Action Space?
+Keeps the robot's execution logic simple and robust:
+* `turn left`
+* `turn right`
+* `go forward`
+* `stop`
+
+### 5. Why LLM Multi‑Path Reasoning?
+Adds high-level intelligence and flexibility to the pipeline:
+1. Generates multiple candidate routes.
+2. Evaluates and judges each option against the environment context.
+3. Selects the safest and most efficient path.
+
+### 6. Why Visualization?
+Provides immediate visual proof of the system's performance, helping demonstrate:
+* World layout and obstacle boundaries.
+* Path quality and optimization.
+* General correctness of the planning algorithms.
