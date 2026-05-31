@@ -467,7 +467,7 @@ def main():
     right_motor.setPosition(float('inf'))
 
     # -------- LLM GOAL SELECTION (MULTI-PATH + JUDGE) --------
-    user_instruction = "Go to the yellow goal, then the red goal, then the green goal"
+    user_instruction = "Choose the most efficient route to visit all goals."
     print("[LLM] Generating multi-path goal candidates...")
     GOALS, meta = solve_goals_with_multipath(user_instruction, OBJECTS, n_candidates=4)
     print(f"[LLM] Winner index: {meta['winner_index']}")
