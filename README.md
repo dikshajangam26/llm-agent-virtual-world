@@ -175,6 +175,7 @@ Open the automatically generated layout image to review the planned path:`contro
 [SYSTEM] All waypoints completed.
 Saved visualization to: map.png
 ```
+
 ## 📊 Visualization Example
 
 Below is the automatically generated map showing:
@@ -182,6 +183,8 @@ Below is the automatically generated map showing:
 - Start position  
 - Goals  
 - Selected path  
+
+![World Map Visualization](controllers/controller_plane_env/map.png)
 
 ---
 
