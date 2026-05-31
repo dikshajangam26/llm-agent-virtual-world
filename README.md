@@ -1,137 +1,85 @@
-# LLM‑Driven Navigation Agent in a Virtual World  
-### Intern Challenge – Intelligent Agent Harness in Webots
+# 🤖 LLM‑Driven Navigation Agent in a Webots 3D World
 
-This project implements a complete intelligent agent system where a Large Language Model (LLM) controls a robot inside a virtual Webots world.  
-The agent perceives its environment, reasons about goals, plans paths, and executes actions to achieve tasks such as:
+This project implements an intelligent agent that navigates a Webots environment using:
+- LLM‑based goal interpretation  
+- A* path planning  
+- Occupancy grid mapping  
+- Waypoint following  
+- Automatic visualization  
+- CSV behaviour logging  
 
+The robot follows natural‑language instructions such as:  
 **“Go to the yellow goal, then the red goal, then the green goal.”**
 
-The system integrates:
-- Webots (3D simulation)
-- Python controller
-- A* lattice path planning
-- Occupancy grid mapping
-- LLM‑based goal reasoning and selection
-- Low‑level waypoint following
-- Full visualization of world + obstacles + path
-
-**Route instruction:**  
-
-If you want to change the route, simply modify the user instruction on line 430 of `controller_plane_env.py`.
+## **Full Documentation:**  
+For a complete explanation of the system, including architecture, design choices, planning logic, and implementation details, please refer to the attached **Full Documentation PDF**.
 
 ---
 
-# 🚀 Features
+## 🚀 Features
 
-### ✔ Virtual environment  
-A 3D Webots world containing:
-- A TurtleBot3 robot  
-- Multiple cardboard‑box obstacles  
-- Red and green goal objects  
-- A continuous x–y coordinate plane  
+- **LLM Multi‑Path Reasoning**  
+  Generates multiple candidate goal sequences and selects the best one using an LLM judge.
 
-### ✔ Observation format  
-The agent receives:
-- GPS position (x, y)  
-- IMU yaw  
-- Occupancy grid (static obstacles)  
-- LLM‑selected goal sequence  
-- Current waypoint target  
+- ** A* Path Planning **  
+  Computes safe paths around inflated obstacles.
 
-### ✔ Action space  
-The robot uses a discrete action set:
-- `GO_FORWARD`  
-- `TURN_LEFT`  
-- `TURN_RIGHT`  
-- `STOP`
+- **Waypoint Controller**  
+  Uses heading error + distance to follow the planned path.
 
-Mapped to differential wheel velocities.
+- **Goal Completion Messages**  
+  Prints:  
+`[GOAL] red goal reached successfully.`
 
-### ✔ LLM‑guided reasoning  
-The LLM:
-1. Generates multiple candidate goal sequences  
-2. Judges each candidate  
-3. Selects the best one  
-4. Returns structured JSON  
-5. Robot executes the chosen plan  
 
-### ✔ Path planning  
-- A* lattice planner  
-- 0.20 m grid resolution  
-- Obstacle inflation for safety  
-- Safe stopping radius near goals  
-- Smooth waypoint following  
+- **CSV Logging**  
+Automatically records robot behaviour into:  `log.csv`
 
-### ✔ Visualization  
-After completing the task, the system automatically generates:
 
-- Obstacles  
-- Start position  
-- Goals  
-- Candidate paths  
-- Selected path  
-- Grid  
-- Labels  
+- **Visualization**  
+Generates a world map with obstacles, goals, and the selected path:  
+`controllers/controller_plane_env/map.png`
 
-Saved as `map.png` inside the controller folder.
 
 ---
 
-# 📂 Project Structure
-```text
-├── controllers/
-│   └── controller_plane_env/
-│       ├── controller_plane_env.py  # Main robot controller script
-│       └── map.png                 # Generated visualization (auto-created)
-├── worlds/
-│   └── plane_env.wbt               # Webots 3D world environment
-└── README.md                       # Project documentation
+## 📂 Project Structure
+
+
+
+---
+
+## 🛠️ Changing the Route
+
+Modify the natural‑language instruction on **line 430** of:
+`controllers/controller_plane_env/controller_plane_env.py`
+
+
+Example:
+"Go to the yellow goal, then the red goal, then the green goal"
+
+
+---
+
+## ▶️ Running the Simulation
+
+### 1. Install dependencies
+```bash
+pip install matplotlib requests
 ```
+### 2. Open Webots
+* Load plane_env.wbt
+* Set controller to controller_plane_env
+
+### 3. Run
+* Press Play in Webots.
+* Outputs generated:
+* map.png → visualization
+* log.csv → behaviour log
+* Console messages → waypoints + goal completion
 
 ---
-
-# 🧠 System Architecture
-
-### 1. **LLM Goal Reasoning**
-The LLM receives:
-- User instruction  
-- List of objects in the world  
-
-It returns:
-```json
-{
-  "goals": [
-    {"x": ..., "y": ...},
-    {"x": ..., "y": ...}
-  ]
-}
-```
-### 2. Occupancy Grid
-Translates physical world barriers into a discrete map for the pathfinder.
-* Converts static 3D obstacles into axis-aligned 2D rectangles.
-* Applies **inflated safety zones** around obstacles to account for the robot's physical radius.
-* Marks corresponding cells in the grid as occupied.
-
-### 3. A* Path Planner
-Calculates the shortest collision-free route.
-* Transforms world coordinates into grid coordinates.
-* Executes the **A\*** search algorithm to find the optimal path.
-* Converts grid paths back into world coordinates, producing a sequential list of waypoints.
-
-### 4. Waypoint Follower
-A closed-loop controller that drives the robot along the planned path. For each waypoint, it:
-* Computes the current distance and heading error.
-* Selects the best discrete steering action.
-* Translates actions into explicit left/right **wheel velocities** for the Webots differential drive motors.
-
-### 5. Visualization
-Generates a real-time `matplotlib` plot tracking the system's internal state:
-* Obstacle boundaries and inflation zones.
-* Robot start position and final goal targets.
-* Candidate paths evaluated vs. the final selected path.
-
----
-## 📊 Visualization Example
+## Visualization Example
 
 Below is the automatically generated map showing:
 - Obstacles  
@@ -142,55 +90,6 @@ Below is the automatically generated map showing:
 <p align="center">
   <img src="Humanoid%20Software/controllers/controller_plane_env/map.png" alt="World Map and Candidate Paths" width="600"/>
 </p>
-
-## ▶️ How to Run
-
-### 1. Install Dependencies
-Ensure you have Python installed, then install the required libraries:
-```bash
-pip install matplotlib requests
-```
-
-### 2. Open Webots
-1. Launch **Webots**.
-2. Open the world file: `worlds/plane_env.wbt`.
-3. Verify that the robot's controller is assigned to `controller_plane_env`.
-
-### 3. Run the Simulation
-Click the **Play** button in Webots. The console will output live telemetry logs:
-```
-[LLM] Generating multi-path goal candidates...
-[PLANNER] Occupied cells: 60
-[SYSTEM] Waypoint 0 reached.
-...
-[SYSTEM] All waypoints completed.
-Saved visualization to: .../controllers/controller_plane_env/map.png
-```
-
-### 4. View Results
-Open the automatically generated layout image to review the planned path:`controllers/controller_plane_env/map.png`
-
----
-
-## 📝 Example Input / Output
-
-* **User Input:** *"Go to the red goal, then the green goal."*
-* **LLM JSON Response:**
-```json
-{
-  "goals": [
-    {"x": 0.19, "y": 1.24},
-    {"x": 1.15, "y": -1.26}
-  ]
-}
-```
-* **Controller Console Output:**
-```
-[SYSTEM] Waypoint 19 reached.
-[SYSTEM] All waypoints completed.
-Saved visualization to: map.png
-```
-
 
 ## 🧩 Design Choices
 
