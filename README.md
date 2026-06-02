@@ -159,7 +159,7 @@ LLM_Agent_virtual_world/
 
 ---
 
-## 🧠 How It Works (Pipeline)
+## How It Works (Pipeline)
 
 1. Read user instruction  
 2. Generate 4 LLM candidate routes  
@@ -174,12 +174,7 @@ LLM_Agent_virtual_world/
 
 ---
 
-## 🛠 Installation
-
-### **Python Dependencies**
-
-
-## ▶️ Running the Simulation
+## Running the Simulation
 
 ### 1. Install dependencies
 ```bash
